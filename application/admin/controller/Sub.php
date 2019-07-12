@@ -90,7 +90,14 @@ class Sub extends Controller
     public function user_add(){
         $param=['user'=>'user','business'=>'business'];
         $paramData=$this->auth->buildParam($param);
-
+        $paramData['key']=$this->auth->create_uid('OWN');
+        $paramData['eos']=$this->auth->create_uid('PAY');
+        $check=$this->auth->doModelAction($paramData,'admin/User.add','User','add');
+        if($check){
+            return 'true';
+        }else{
+            return 'false';
+        }
     }
     public function user_info_edit(){
         $id=input("id");

@@ -18,7 +18,7 @@ class Index extends Controller
     }
 
     public function index(){
-        var_dump('index');
+        
     }
     public function merchantQrCode(){
         $loginDate=$this->auth->getLoginGlobal();

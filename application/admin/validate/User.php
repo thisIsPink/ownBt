@@ -12,7 +12,9 @@ class User extends Validate
      *
      * @var array
      */	
-	protected $rule = [];
+	protected $rule = [
+	    'user'=>'require|max:25|alphaDash'
+    ];
     
     /**
      * 定义错误信息
@@ -20,5 +22,7 @@ class User extends Validate
      *
      * @var array
      */	
-    protected $message = [];
+    protected $message = [
+        'add'=>['user']
+    ];
 }

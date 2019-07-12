@@ -130,7 +130,7 @@ class Base extends Controller
      * @param $action_name      model的方法
      * return ===
      **/
-    protected function doModelAction($param_data,$validate_name = false, $model_name = false,$action_name='editData'){
+    public function doModelAction($param_data,$validate_name = false, $model_name = false,$action_name='editData'){
         if ($validate_name != false) {
             $result = $this->validate($param_data, $validate_name);
             if (true !== $result) return $this->showReturnCodeWithOutData(1003,  $result);
