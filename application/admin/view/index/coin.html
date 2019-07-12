@@ -1,0 +1,225 @@
+<html class="x-admin-sm">
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.1</title>
+    <link rel="stylesheet" href="__BS_CSS__/font.css">
+    <link rel="stylesheet" href="__BS_CSS__/xadmin.css">
+    <script type="text/javascript" src="__P_JS__/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="__BS_LAY__/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__BS_JS__/xadmin.js"></script>
+    <script type="text/javascript" src="__BS_JS__/cookie.js"></script>
+  </head>
+  
+  <body>
+    <tool>
+      <form class="layui-form" style="display: none;" id="alert_add">
+        <div class="layui-form-item">
+          <label for="username" class="layui-form-label">
+            <span class="x-red">*</span>币种
+          </label>
+          <div class="layui-input-inline">
+            <input type="text" id="type" name="type" required="" lay-verify="required"
+                   autocomplete="off" class="layui-input" oninput='this.value=this.value.toString().match(/^[A-Za-z]+$/)'>
+          </div>
+          <div class="layui-form-mid layui-word-aux">
+            <span class="x-red">*</span>已发行的货币
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label for="phone" class="layui-form-label">
+            <span class="x-red">*</span>最小单位
+          </label>
+          <div class="layui-input-inline">
+            <input type="text" id="small" name="min_company" required="" lay-verify="required" autocomplete="off" class="layui-input" oninput="var v=this.value||'';v=v.replace(/[^\d]/g,'');if(v.length==1 && v==0){v=''};this.value=v.substr(0,2);">
+          </div>
+          <div class="layui-form-mid layui-word-aux">
+            <span class="x-red">*</span>小数点后几位
+          </div>
+        </div>
+        <div>
+          <div class="layui-form-item">
+            <label for="L_email" class="layui-form-label">
+              <span class="x-red">*</span>最少提币量
+            </label>
+            <div class="layui-input-inline">
+              <input type="text" id="min_withdraw" name="min_withdraw" autocomplete="off" class="layui-input" oninput='this.value=this.value.toString().match(/^\d+(?:\.\d{0,100})?/)'>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+              默认为0
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <button class="layui-btn" lay-filter="add" lay-submit="">增加</button>
+          </div>
+        </div>
+      </form>
+    </tool>
+    <div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">后台</a>
+        <a href="">货币管理</a>
+        <a>
+          <cite>管理</cite>
+        </a>
+      </span>
+      <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+    </div>
+    <div class="x-body">
+      <xblock>
+        <button class="layui-btn" onclick="show_add()"><i class="layui-icon"></i>添加</button>
+      </xblock>
+      <table id="coin_list" lay-filter="coin_list" class="layui-table x-admin"></table>
+      <script type="text/html" id="coin_switch">
+        <input type="checkbox" lay-filter="amount" lay-skin="switch" lay-text="是|否" {{ d.amount==0 ? "" : "checked" }}>
+      </script>
+      <script type="text/html" id="coin_bar">
+        <a onclick="member_stop(this,{{d.id}})" href="javascript:;"  title="{{d.state == '1' ? '使用中' : '已停用'}}"><i class="layui-icon">
+          &#{{d.state == '1' ? 'xe601' : 'xe62f' }};
+        </i></a>
+      </script>
+      <script type="text/html" id="coin_state">
+        <span class="layui-btn layui-btn-normal layui-btn-mini {{d.state == '1' ? '' : 'layui-btn-disabled'}}">{{d.state == '1' ? '使用中'  : '已停用'}}</span>
+      </script>
+    </div>
+    <script>
+      layui.use(['table','form'],function(){
+        var table = layui.table;
+        var form = layui.form;
+        table.render({
+          elem: '#coin_list'
+          ,height: 470
+          ,url: 'json/coin' //数据接口
+          ,page: true //开启分页
+          ,cols: [[ //表头
+            {field: 'id', title: 'ID', sort: true, fixed: 'left'}
+            ,{field: 'name', title: '币名', edit:"text"}
+            ,{field: 'smallest_unit', title: '最小单位', templet: '<div>小数点后{{d.smallest_unit}}位</div>',edit:"text"}
+            ,{field: 'min_withdraw', title: '最小提币金额', edit:"text"}
+            ,{field: 'publisher', title: '发行人', edit:"text"}
+            ,{field: 'state', title: '状态',toolbar:'#coin_state'}
+            ,{title:'操作', toolbar: '#coin_bar'}
+          ]]
+        });
+        table.on('edit(coin_list)', function(obj){
+          switch(obj.field){
+            case "name":
+              if(/^[A-Za-z]+$/.test(obj.value)){
+                break;
+              }else{
+                layer.msg("请输入字母");
+                return;
+              }
+            case "smallest_unit":
+              if(/^0$|^[1-9]$|^([1-9][0-9])$/.test(obj.value)){
+                break;
+              }else{
+                layer.msg("请输入100以内的正整数哦");
+                return;
+              }
+              break;
+            case "min_withdraw":
+              if(/^\d+(?:\.\d{0,5})?/.test(obj.value)){
+                break;
+              }else{
+                layer.msg("请输入数字，不能低于小数点后5位哦");
+                return;
+              }
+              break;
+          }
+          $.ajax({
+            url: 'sub/coin_edit',
+            type: 'post',
+            dataType: 'json',
+            data: {"field": obj.field,"value":obj.value,"id":obj.data.id},
+            success:function(msg){
+              if(msg.flag==true){
+                layer.msg("修改成功");
+              }else{
+                layer.msg("修改失败");
+              }
+            }
+          });
+        });
+        form.on('submit(add)', function(data){
+          console.log(data);
+          $.ajax({
+            url: 'sub/coin_add',
+            type: 'post',
+            dataType: 'json',
+            data: {
+              "name": data.field.type,
+              "small": data.field.min_company,
+              "min_withdraw": data.field.min_withdraw
+            },
+            success:function (msg) {
+              if(msg.flag==true){
+                layer.msg("添加成功");
+                setTimeout(function (){location.reload()},2000);
+              }else{
+                layer.msg("添加失败");
+              }
+            }
+          });
+          return false;
+        });
+      })
+       /*用户-停用*/
+      function member_stop(obj,id){
+        if($(obj).attr('title')=='使用中'){
+          layer.confirm('确认要停用吗？',function(index){
+            //发异步把用户状态进行更改
+            $.ajax({
+              url: 'sub/coin_state_down',
+              type: 'post',
+              dataType: 'json',
+              data: {"id": id},
+              success:function(msg){
+                if(msg.flag==true){
+                  $(obj).attr('title','已停用')
+                  $(obj).find('i').html('&#xe62f;');
+                  $(obj).parents("tr").find("[data-field='state']").find('span').addClass('layui-btn-disabled').html('已停用');
+                  layer.msg('已停用!',{icon: 5,time:1000});
+                }
+              }
+            });
+            
+          });
+        }else if($(obj).attr('title')=='已停用'){
+          layer.confirm('确认要启用吗？',function(index){
+            $.ajax({
+              url: 'sub/coin_state_up',
+              type: 'post',
+              dataType: 'json',
+              data: {"id": id},
+              success:function(msg){
+                if(msg.flag==true){
+                  $(obj).attr('title','使用中')
+                  $(obj).find('i').html('&#xe601;');
+                  $(obj).parents("tr").find("[data-field='state']").find('span').removeClass('layui-btn-disabled').html('已启用');
+                  layer.msg('已启用!',{icon: 1,time:1000});
+                }
+              }
+            });
+          });
+        }else{
+          layer.msg('请联系管理员!',{icon: 2,time:1000});
+        }
+      }
+      function show_add(){
+        layui.use('layer', function(){
+          var layer = layui.layer;
+          layer.open({
+            type: 1,
+            title:'添加',
+            content: $('#alert_add'),
+            area:['400px','250px']
+          })
+        });
+      }
+    </script>
+  </body>
+
+</html>
