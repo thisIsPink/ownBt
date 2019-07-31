@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>支付</title>
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_837732_7jk7kbco94r.css">
+  <style>
+    html,body{
+      padding: 0px;
+      margin: 0px;
+    }
+    .w1200{
+      width: 1200px;
+      margin: 0 auto;
+    }
+    /* 头部 */
+    header{
+      height: 64px;
+      width: 100%;
+      padding: 30px 0;
+    }
+    header h1{
+      text-align: center;
+      line-height: 64px;
+      font-size: 30px;
+      color: #008dd5;
+      margin: 0px;
+    }
+    .banner{
+      background: url('/static/public/img/base/banner.jpg') no-repeat;
+      background-size: 100% 100%;
+      min-width: 1200px;
+    }
+    .container{
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 80px 0px
+    }
+    .loginbox{
+      width: 350px;
+      background: rgba(0,0,0,0.3);
+      text-align: center;
+      padding: 20px 0px 80px 0px
+    }
+    .loginbox h2{
+      font-size: 30px;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+    form{
+      width: 80%;
+      margin: 0 auto;
+    }
+    .formitem{
+      position: relative;
+      margin-bottom: 14px;
+    }
+    .formitem input{
+      color: #666;
+      padding: 12px 16px 8px 36px;
+      border-radius: 4px;
+      width: 99.9%;
+      height: 36px;
+      line-height: 36px;
+      margin: 0 10px 7px 0;
+      font-size: 14px;
+      box-sizing: border-box;
+      border: none;
+    }
+    .icon{
+      position: absolute;
+      top: 10px;
+      left: 12px;
+      font-size: 18px;
+      vertical-align: middle;
+    }
+    .btn{
+      width: 100%;
+      height: 36px;
+      line-height: 36px;
+      border-radius: 4px;
+      box-sizing: border-box;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>OWNBT支付平台</h1>
+  </header>
+  <main>
+    <div class="banner">
+      <div class="w1200 container">
+        <div class="loginbox">
+          <h2>OWNBT</h2>
+          <form action="">
+            <div class="formitem" role="username">
+              <input type="text" name="username" maxlength="16" placeholder="用户名">
+              <svg t="1563939326181" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4094" width="16" height="16"><path d="M968.537498 831.065772A497.1245 497.1245 0 0 0 704.876111 567.462098q-17.55915-7.430536-35.507863-13.432678a299.486671 299.486671 0 0 0 142.045878-254.61489C811.414126 134.312349 677.101777 0 511.999596 0S212.585066 134.312349 212.585066 299.41453A299.486671 299.486671 0 0 0 354.630944 554.043848q-17.948712 6.01657-35.507863 13.432678A495.104548 495.104548 0 0 0 16.505486 1024h72.141126C88.646612 790.565744 278.56534 600.647016 511.999596 600.647016s423.352984 189.918729 423.352984 423.352984h72.141126a492.420898 492.420898 0 0 0-38.956208-192.934228zM284.726192 299.41453C284.726192 174.090965 386.676032 72.141126 511.999596 72.141126s227.273404 101.949839 227.273404 227.273404S637.32316 526.63022 511.999596 526.63022 284.726192 424.738094 284.726192 299.41453z" fill="#000000" p-id="4095"></path></svg>
+            </div>
+            <div class="formitem" role="password">
+              <input type="password" name="password" maxlength="16" placeholder="密码">
+              <svg t="1563939367953" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4347" width="16" height="16"><path d="M519.917526 580.618557c-36.948454 0-68.618557 31.670103-68.618557 68.618556 0 26.391753 15.835052 47.505155 36.948454 58.061856v73.896907c0 15.835052 10.556701 26.391753 26.391752 26.391753s26.391753-10.556701 26.391753-26.391753v-73.896907c21.113402-10.556701 36.948454-31.670103 36.948453-58.061856 10.556701-42.226804-21.113402-68.618557-58.061855-68.618556M160.409072 321.979381c-5.278351 10.556701-15.835052 21.113402-31.670103 15.835052s-21.113402-15.835052-15.835051-26.391753c63.340206-205.85567 195.298969-311.42268 395.876288-311.42268 137.237113 0 232.247423 42.226804 295.587629 110.845361 31.670103 31.670103 68.618557 105.56701 63.340206 100.28866 10.556701 10.556701 5.278351 21.113402-5.27835 31.670103s-21.113402 5.278351-26.391753-5.278351c0 0-36.948454-68.618557-63.340206-100.28866-52.783505-58.061856-131.958763-95.010309-263.917526-95.010309-179.463918 0-295.587629 89.731959-348.371134 279.752577z" fill="#999999" p-id="4348"></path><path d="M921.072165 920.016495c0 47.505155-10.556701 58.061856-52.783505 58.061856H150.43299c-47.505155 0-52.783505-10.556701-52.783505-58.061856V466.078351c0-47.505155 10.556701-58.061856 52.783505-58.061856h717.85567c47.505155 0 52.783505 10.556701 52.783505 58.061856v453.938144zM129.319588 360.51134C81.814433 360.51134 50.14433 397.459794 50.14433 439.686598v512c0 42.226804 36.948454 79.175258 79.175258 79.175258H894.680412c42.226804 0 79.175258-36.948454 79.175258-79.175258V439.686598c0-42.226804-31.670103-79.175258-79.175258-79.175258H129.319588z" fill="#999999" p-id="4349"></path></svg>
+            </div>
+            <button class="btn">登录</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

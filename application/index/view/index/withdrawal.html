@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>支付</title>
+  <script type="text/javascript" src="__P_JS__/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="__BS_LAY__/layui.js" charset="utf-8"></script>
+  <script type="text/javascript" src="__BS_JS__/xadmin.js"></script>
+  <script type="text/javascript" src="__BS_JS__/cookie.js"></script>
+  <style>
+    html,body,p,ul,li{
+      padding: 0px;
+      margin: 0px;
+    }
+    ul,li{
+      list-style: none;
+    }
+    a{
+      text-decoration: none;
+    }
+    .w1200{
+      width: 1200px;
+      margin: 0 auto;
+    }
+    /* 头部 */
+    header{
+      height: 64px;
+      width: 100%;
+      padding: 10px 0;
+    }
+    header h1{
+      text-align: center;
+      line-height: 64px;
+      font-size: 30px;
+      color: #008dd5;
+      margin: 0px;
+    }
+    .container h2{
+      color: #333333;
+      font-size: 20px;
+      margin-bottom: 10px;
+      padding-left: 30px;
+    }
+    .container hr{
+      color: #fafafa;
+    }
+    .orange{
+      color: #ff721f
+    }
+    .change{
+      color: #3368bf;
+      padding: 6px 15px;
+      border: 1px solid #3368bf;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .table{
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      color: #3c3c3c;
+      table-layout: fixed;
+    }
+    .table tr:nth-of-type(even){
+      background: #fafafa;
+    }
+    .table td:first-of-type{
+      text-align:right;
+    }
+    .table td{
+      height:40px;
+    }
+    .table input{
+      width: 200px;
+      height: 24px;
+      border-radius: 5px;
+      border: solid 1px #cccccc;
+      outline: none;
+      font-size: 14px;
+      padding-left: 4px;
+      padding-right: 4px;
+    }
+    .btn{
+      width: 320px;
+      height: 46px;
+      background-color: #008dd5;
+      border-radius: 5px;
+      margin: 0 auto;
+      border: none;
+      font-size: 18px;
+      margin-top: 20px;
+      display: block;
+      color: #ffffff;
+    }
+    .eject{
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .eject .bg{
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.4)
+    }
+    .eject .ejectinfo{
+      width: 300px;
+      position: absolute;
+      z-index: 2;
+      background: #ffffff;
+      text-align: center;
+      padding: 10px 0px 30px 0px;
+    }
+    .stro{
+      font-weight: 600;
+      margin-top: 20px;
+    }
+    .eject .iconok{
+      margin: 20px auto;
+    }
+    .eject .tixian{
+      display: inline-block;
+      padding: 4px 20px;
+      border: 1px solid #bfbfbf;
+      margin-bottom: 20px;
+    }
+    .eject .btn{
+      padding: 4px 20px;
+      display: inline;
+    }
+    .eject .red{
+      color: #e20000;
+    }
+    .close{
+      position: absolute;
+      top: 0px;
+      right: 6px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>OWNBT支付平台</h1>
+  </header>
+  <main class="w1200 container">
+    <h2>提现</h2>
+    <hr />
+    <table class="table">
+      <tr>
+        <td>提现方式：</td>
+        <td>
+          <span class="change">普通提现</span>
+        </td>
+      </tr>
+      <tr>
+        <td>持卡人：</td>
+        <{if ($data!=null)}>
+          <td><{$data[0]['name']}>（<{$data[0]['card']}>）</td>
+        <{else /}>
+          <td><span class="change"><a href="/index/index/bankcard" style="color: #3368bf;">添加银行卡</a></span></td>
+        <{/if}>
+      </tr>
+      <tr>
+        <td>可提金额：</td>
+        <td><span class="orange" id="available"><{$money}></span> 元</td>
+      </tr>
+      <tr>
+        <td>提现金额：</td>
+        <td>
+          <input type="text" placeholder="请输入不要大于可提金额的数字金额" id="money" oninput='this.value=this.value.toString().match(/^\d+(?:\.\d{0,2})?/)'> 元
+        </td>
+      </tr>
+      <tr>
+        <td>手续费：</td>
+        <td><span class="orange" id="charge">0.00</span> 元</td>
+      </tr>
+      <tr>
+        <td>实际到账金额：</td>
+        <td><span class="orange" id="account">0.00</span> 元</td>
+      </tr>
+    </table>
+    <button class="btn" id="sub">立即提现</button>
+  </main>
+  <article class="eject" style="display: none;">
+    <div class="bg"></div>
+    <div class="ejectinfo">
+      <p class="stro">您的提现申请已受理！</p>
+      <svg t="1564127112598" class="icon iconok" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1983" width="64" height="64"><path d="M512 1024A512 512 0 1 1 512 0a512 512 0 0 1 0 1024z m-49.590857-377.197714L315.977143 498.614857 219.428571 590.848c70.217143 37.814857 168.594286 106.788571 252.854858 213.723429C531.821714 692.662857 715.337143 463.725714 804.571429 443.245714c-14.409143-57.709714-22.528-166.034286 0-223.817143-183.003429 120.685714-342.162286 427.373714-342.162286 427.373715z" fill="#1296db" p-id="1984"></path></svg><br />
+      <p class="tixian">提现<span class="red">500.00</span>元</p><br />
+      <p class="btn down">提现成功</p>
+      <p class="stro">预计24小时之内到账</p>
+      <svg t="1564127826159" class="icon close down" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2765" width="32" height="32"><path d="M512 426.45429624L683.09140753 255.3628887c24.44162965-24.44162965 61.10407412-24.44162965 85.54570377 0s24.44162965 61.10407412 0 85.54570377L597.54570376 512l171.09140754 171.09140753c24.44162965 24.44162965 24.44162965 61.10407412 0 85.54570377s-61.10407412 24.44162965-85.54570377 0L512 597.54570376 340.90859247 768.6371113c-24.44162965 24.44162965-61.10407412 24.44162965-85.54570377 0-24.44162965-24.44162965-24.44162965-61.10407412 0-85.54570377L426.45429624 512 255.3628887 340.90859247C230.92125905 316.46696281 230.92125905 279.80451835 255.3628887 255.3628887c24.44162965-24.44162965 61.10407412-24.44162965 85.54570377 0L512 426.45429624z" fill="#999999" p-id="2766"></path></svg>
+    </div>
+  </article>
+<script>
+  $('#money').change(function () {
+    if($(this).val()><{$money}>){
+      $(this).val(<{$money}>);
+    }
+    var money = $(this).val();
+    var fee = 0;
+    $('#charge').text(money*fee);
+    $('#account').text(money-money*fee);
+  });
+  $('#sub').click(function () {
+    if($('#money').val()==0||$('#money').val()==null||$('#money').val()=='') {
+      layer.msg('您还没有输入余额');
+      return false;
+    }
+    <{if ($data!=null)}>
+    $.ajax({
+      url:'/index/api/withdrawal',
+      type:'post',
+      data:{money:$('#money').val(),card:<{$data[0]['id']}>},
+      dataType:'json',
+      success:function (obj) {
+        if(obj.code=='1001'){
+          $('.eject .tixian .red').text($('#money').val());
+          $('#available').text(obj.data);
+          $('.eject').css('display','flex');
+        }else{
+          layer.msg(obj.msg);
+        }
+      }
+    });
+    <{else /}>
+      layer.msg('请先绑定银行卡');
+    <{/if}>
+    return false;
+  });
+  $('.down').click(function () {
+    $('.eject').css('display','none')
+    window.location.href="/index/index/index";
+  });
+</script>
+</body>
+</html>

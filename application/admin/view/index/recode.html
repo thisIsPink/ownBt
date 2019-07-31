@@ -1,0 +1,137 @@
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.1</title>
+    <link rel="stylesheet" href="__BS_CSS__/font.css">
+    <link rel="stylesheet" href="__BS_CSS__/xadmin.css">
+    <script type="text/javascript" src="__P_JS__/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="__BS_LAY__/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__BS_JS__/xadmin.js"></script>
+    <script type="text/javascript" src="__BS_JS__/cookie.js"></script>
+</head>
+
+<body>
+<tool>
+    <form class="layui-form" style="display: none;" id="alert_add">
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>选择货币
+            </label>
+            <div class="layui-input-inline" >
+                <select name="currency" lay-verify="required" lay-search id="add_currency">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>比例
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="pro" name="pro" required="" lay-verify="required" autocomplete="off" class="layui-input" oninput='this.value=this.value.toString().match(/^\d+(?:\.\d{0,10})?/)'>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>当前虚拟币:法币
+            </div>
+        </div>
+        <div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                </label>
+                <button class="layui-btn" lay-filter="add" lay-submit="">增加</button>
+            </div>
+        </div>
+    </form>
+</tool>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">后台</a>
+        <a href="">货币管理</a>
+        <a>
+          <cite>例时记录</cite>
+        </a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <table id="coin_list" lay-filter="coin_list" class="layui-table x-admin"></table>
+</div>
+<script type="text/html" id="bar">
+    {{# if(d.state=='1'){ }}
+    <a class="layui-btn layui-btn-xs layui-btn-normal edit" lay-event="frozen">冻结该笔资金</a>
+    {{# }else{ }}
+    <a class="layui-btn layui-btn-xs edit" lay-event="thaw">解冻该笔资金</a>
+    {{# } }}
+</script>
+<script>
+    var user=GetQueryString('id');
+    layui.use(['table'],function(){
+        var table = layui.table;
+        table.render({
+            elem: '#coin_list'
+            ,height: 470
+            ,url: '/admin/json/userRecord?user='+user //数据接口
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                // {field: 'id', title: 'ID', sort: true, fixed: 'left'}
+                {field: 'money', title: '到账金额'},
+                {field: 'time', title: '时间',templet:'<div>{{getLocalTime(d.time)}}</div>'},
+                { title: '到账货币',templet:'<div>{{d.name==null?"直接到账":d.name}}{{d.type=="1"?"(BTC)":d.type=="2"?"(ETH)":d.type=="3"?"(EOS)":d.type==null?"":"???"}}</div>'},
+                {field: 'balance', title: '上次余额'},
+                {title: '当前总额',templet:'<div>{{parseInt(d.money)+(d.balance==null?0:parseInt(d.balance))}}</div>'},
+                {title:'操作', toolbar: '#bar'}
+            ]]
+        });
+        table.on('tool(coin_list)', function(obj){
+            if(obj.event === 'frozen'){
+                layer.confirm('确定要冻结该笔资金', function(index){
+                    $.ajax({
+                        url:'/admin/sub/assetFrozen',
+                        data:{id:obj.data.id},
+                        dataType:'json',
+                        type:'post',
+                        success:function (objs) {
+                            if(objs.flag==true){
+                                $(obj.tr).find('.edit').removeClass('layui-btn-normal').attr('lay-event','thaw').text('解冻该笔资金');
+                                layer.msg('该笔交易已冻结');
+                            }else{
+                                layer.msg(objs.msg);
+                            }
+                        }
+                    });
+                });
+            }else if(obj.event === 'thaw'){
+                layer.confirm('确定要解冻该笔资金', function(index){
+                    $.ajax({
+                        url:'/admin/sub/assetThaw',
+                        data:{id:obj.data.id},
+                        dataType:'json',
+                        type:'post',
+                        success:function (objs) {
+                            if(objs.flag==true){
+                                layer.msg('该笔交易已解冻');
+                                $(obj.tr).find('.edit').addClass('layui-btn-normal').attr('lay-event','frozen').text('冻结该笔资金');
+                            }else{
+                                layer.msg(objs.msg);
+                            }
+                        }
+                    });
+                });
+            }
+        });
+    })
+    function getLocalTime(nS) {
+        if(nS==null||nS==''){
+            return '无';
+        }
+        return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');
+    }
+    function GetQueryString(name){
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return unescape(r[2]); return null;
+    }
+</script>
+</body>
+
+</html>

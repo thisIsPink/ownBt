@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>支付</title>
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_837732_7jk7kbco94r.css">
+  <script type="text/javascript" src="__P_JS__/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="__P_JS__/io.js"></script>
+  <style>
+    html,body,p,ul,li{
+      padding: 0px;
+      margin: 0px;
+    }
+    ul,li{
+      list-style: none;
+    }
+    a{
+      text-decoration: none;
+    }
+    .w1200{
+      width: 1200px;
+      margin: 0 auto;
+    }
+    /* 头部 */
+    header{
+      height: 64px;
+      width: 100%;
+      padding: 10px 0;
+    }
+    header h1{
+      text-align: center;
+      line-height: 64px;
+      font-size: 30px;
+      color: #008dd5;
+      margin: 0px;
+    }
+    .banner{
+      width: 100%;
+    }
+    .banner img{
+      width: 100%;
+    }
+    .container{
+      display: flex;
+      margin-top: 50px;
+      padding-bottom: 80px;
+    }
+    .mainL{
+      width: 300px;
+      height: 370px;
+      box-sizing: border-box;
+      padding: 35px 0 0 64px;
+      border-radius: 5px;
+      border: solid 1px #b5b5b5;
+      margin-right: 15px;
+    }
+    .mainL h3{
+      font-size: 26px;
+    }
+    .mainL .ltitle{
+      color: #b0b0b0;
+      font-size: 16px;
+    }
+    .mainL .price{
+      font-size: 26px;
+      font-weight: 500;
+      margin-bottom: 24px;
+      margin-top: 6px;
+    }
+    .mainL .noprice{
+      color: #008dd5;
+      margin-top: 6px;
+    }
+    .mainL .btnl{
+      background: #008dd5;
+      color: #ffffff;
+      width: 120px;
+      height: 35px;
+      margin-top: 20px;
+      line-height: 35px;
+      border-radius: 5px;
+      border: none;
+    }
+    .mainR{
+      flex: 1;
+      border-radius: 5px;
+      border: solid 1px #b5b5b5;
+      height: auto;
+      text-align: center;
+    }
+    .table{
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      color: #3c3c3c;
+      table-layout: fixed;
+    }
+    .table th{
+      background: #f5f5f5;
+      padding: 5px 0;
+      font-size: 14px;
+      line-height: 18px;
+      height: 34px;
+      font-weight: normal;
+    }
+    .table td{
+      height: 36px;
+      border-bottom: 1px solid #ececec;
+    }
+    .pagebox{
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 10px 20px;
+      color: #aeaeae;
+    }
+    .pagebox ul{
+      display: flex;
+      align-items: center;
+      margin-right: 10px;
+      color: #aeaeae;
+    }
+    .pagebox ul li{
+      margin: 0 4px;
+    }
+    .pagebox ul li.active{
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #008dd5;
+      line-height: 24px;
+    }
+    .pagebox ul li.active a{
+      color: #ffffff;
+    }
+    .pagebox ul a{
+      color: #aeaeae;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>OWNBT支付平台</h1>
+  </header>
+  <main>
+    <div class="banner">
+      <img src="/static/public/img/base/banner.jpg" alt="banner">
+    </div>
+    <div class="container w1200">
+      <div class="mainL">
+        <h3>资金总额</h3>
+        <p class="ltitle">可用余额（元）</p>
+        <p class="price" id="money"><{$data['money']}></p>
+        <p class="ltitle">不可用余额（元）</p>
+        <p class="noprice"><{$data['frozen']}></p>
+        <button class="btnl"><a href="/index/index/withdrawal" style="color:#0C0C0C">提现</a></button>
+      </div>
+      <div class="mainR">
+        <h3>交易记录</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>时间</th>
+              <th>交易号</th>
+              <th>交易金额</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <{volist name='trad' id='vo'}>
+            <tr>
+              <td><{$vo.time|date='Y-m-d H:i'}></td>
+              <td><{$vo.order}></td>
+              <td><{$vo.money}></td>
+              <td><{$vo.state=='1'?'成功':'冻结'}></td>
+              <td>退款</td>
+            </tr>
+            <{/volist}>
+          </tbody>
+        </table>
+        <div class="pagebox">
+          <ul>
+            <li><a href="#"><</a></li>
+            <li class="active"><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li>...</li>
+            <li><a href="#">10</a></li>
+            <li><a href="#">></a></li>
+          </ul>
+          <p>共10页</p>
+        </div>
+      </div>
+    </div>
+  </main>
+  <div id="alert_sound"></div>
+  <audio id="xplay">
+    <source src="http://tsn.baidu.com/text2audio?tex=不对&lan=zh&cuid=UsedToFit&ctp=1&tok=24.f558f41e8041493601dc048c5a8a29c4.2592000.1567134374.282335-16856608" type="audio/mp3" />
+    <embed height="100" width="100" src="http://tsn.baidu.com/text2audio?tex=不对&lan=zh&cuid=UsedToFit&ctp=1&tok=24.f558f41e8041493601dc048c5a8a29c4.2592000.1567134374.282335-16856608" />
+  </audio>
+<script>
+  function GetQueryString(name){
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if(r!=null)return unescape(r[2]); return null;
+  }
+
+  function getLocalTime(time) {
+    var date = new Date();
+    date.setTime(time * 1000);
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    m = m < 10 ? ('0' + m) : m;
+    var d = date.getDate();
+    d = d < 10 ? ('0' + d) : d;
+    var h = date.getHours();
+    h = h < 10 ? ('0' + h) : h;
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+    minute = minute < 10 ? ('0' + minute) : minute;
+    second = second < 10 ? ('0' + second) : second;
+    return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+  }
+  function accAdd(arg1,arg2){
+    return getFloatStr((parseInt((arg1*100+arg2*100)))/100);
+  }
+  function getFloatStr(num){
+    num += '';
+    num = num.replace(/[^0-9|\.]/g, '');
+    if(/^0+/) num = num.replace(/^0+/, '');
+    if(!/\./.test(num)) num += '.00';
+    if(/^\./.test(num)) num = '0' + num;
+    num += '00'; //在字符串末尾补零
+    return num.match(/\d+\.\d{2}/)[0];
+  };
+  function playMusic(money) {
+    var text='O,W,N pay到账,'+money+'元';
+    var str='http://tsn.baidu.com/text2audio?tex='+text+'&lan=zh&cuid=UsedToFit&ctp=1&tok=24.f558f41e8041493601dc048c5a8a29c4.2592000.1567134374.282335-16856608';
+    var ua = navigator.userAgent.toLowerCase();
+    var audiopath = str;
+    //var audiopath = video;
+    if (ua.match(/msie ([\d.]+)/)) {
+      $('#alert_sound').html('<object classid="clsid:22D6F312-B0F6-11D0-94AB-0080C74C7E95"><param name="AutoStart" value="1" /><param name="Src" value="' + audiopath + '" /></object>');
+    }
+    else if (ua.match(/firefox\/([\d.]+)/)) {
+      $('#alert_sound').html('<audio autoplay="autoplay"><source src="' + audiopath + '" type="audio/wav"/><source src="'+str+'" type="audio/mpeg"/></audio>');
+    }
+    else if (ua.match(/chrome\/([\d.]+)/)) {
+      $('#alert_sound').html('<audio src="' + audiopath + '" type="audio/wav" autoplay="autoplay" hidden="true"></audio>');
+    }
+    else if (ua.match(/opera.([\d.]+)/)) {
+      $('#alert_sound').html('<embed src="' + audiopath + '" hidden="true" loop="false"><noembed><bgsounds src=' + audiopath + '></noembed>');
+    }
+    else if (ua.match(/version\/([\d.]+).*safari/)) {
+      $('#alert_sound').html('<audio src="' + audiopath + '" type="audio/wav" autoplay=”autoplay” hidden="true"></audio>');
+    }
+    else {
+      $('#alert_sound').html('<embed src="' + audiopath + '" type="audio/wav" hidden="true" loop="false" mastersound></embed>');
+    }
+  }
+  $(function () {
+    var num=<{$data.num}>,str='<ul>',page;
+    var getPage=GetQueryString('page')?GetQueryString('page'):1,getLimit=GetQueryString('limit')?GetQueryString('limit'):20;
+    str+='<li><a href="?page=1&limit=20"><</a></li>';
+    for(page=1;page<=Math.ceil(num/getLimit);page++){
+      if(page==getPage){
+        str+='<li class="active"><a href="#">'+page+'</a></li>';
+      }else{
+        str+='<li><a href="?page='+page+'&limit=20">'+page+'</a></li>';
+      }
+    }
+    str+='<li><a href="?page='+(page-1)+'&limit=20">></a></li></ul><p>共'+Math.ceil(num/getLimit)+'页</p>';
+    $('.pagebox').html(str);
+  })
+  var socket = io('http://www.ownpay.com:2031');
+  socket.emit('login','<{$id}>');
+  socket.on('moneyInfo',data =>{
+    var str='<tr><td>'+getLocalTime(data.time)+'</td><td>'+data.order+'</td><td>'+data.money+'</td><td>'+(data.state==1?'成功':'冻结')+'</td><td>退款</td></tr>';
+    $('tbody').prepend(str);
+    $('#money').text(accAdd(Number($('#money').text()),Number(data.money)));
+    playMusic(data.money);
+  });
+</script>
+</body>
+</html>

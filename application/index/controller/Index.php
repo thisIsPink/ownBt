@@ -10,6 +10,13 @@ use think\facade\Request;
 
 class Index extends Controller
 {
+    private function is_login(){
+        if(is_numeric(session('user'))){
+            return true;
+        }else{
+            $this->success('请登陆', '/index/index/index');
+        }
+    }
     protected $auth = null;
     function __construct(App $app = null)
     {
@@ -18,7 +25,42 @@ class Index extends Controller
     }
 
     public function index(){
-        
+        if(is_numeric(session('user'))) {
+            $page=input('page');
+            $limit=input('limit');
+            if((int)$limit>40){
+                $limit=40;
+            }
+            $data=db('user')->where('uid',session('user'))->find();
+            $num=db('trad')->where('user',session('user'))->count();
+            $trad=db('trad')->where('user',session('user'))->page($page,$limit)->order('time','desc')->select();
+            $retuenData=['money'=>$data['money'],'frozen'=>$data['frozen'],'num'=>$num];
+            $this->assign('trad',$trad);
+            $this->assign('data',$retuenData);
+            $this->assign('id',md5(session('user')));
+            return $this->fetch('home');
+        }else{
+            return $this->fetch('login');
+        }
+    }
+    public function withdrawal(){
+        if($this->is_login()) {
+            $data=db('bank_card')->field('id,card,name')->where('user',session('user'))->select();
+            if($data!=null){
+                foreach ($data as $key=>$value){
+                    $data[$key]['card']=substr($data[$key]['card'], 0, 4) . "******" . substr($data[$key]['card'], -4);
+                }
+            }
+            $money=db('user')->field('money')->where('uid',session('user'))->find()['money'];
+            $this->assign('money',$money);
+            $this->assign('data',$data);
+            return $this->fetch();
+        }
+    }
+    public function bankcard(){
+        if($this->is_login()) {
+            return $this->fetch();
+        }
     }
     public function merchantQrCode(){
         $loginDate=$this->auth->getLoginGlobal();
@@ -129,5 +171,47 @@ class Index extends Controller
     }
     public function payRecode(){
         $this->auth->makeOutImg(input('data'),['logo'=>false]);
+    }
+    public function eospark(){
+        $a=$this->send_post('https://open-api.eos.blockdog.com/v1/third/get_account_transfer','{"account_name":"soul2master4","page":1}');
+        $a=json_decode($a,true);
+//        var_dump($a);
+        if(isset($a['list'])&&$a['list']!=null){
+            $i=0;
+            foreach ($a['list'] as $value){
+                $money=$value['data']['quantity']+0;
+                $coin_token=$value['account'];
+                $txid=$value['id'];
+                $form=$value['data']['from'];
+                $time=strtotime("+8 hours",strtotime($value["blockTime"]));
+            }
+        }
+    }
+    public function send_post($url, $data) {
+        //初使化init方法
+        $ch = curl_init();
+        //指定URL
+        curl_setopt($ch, CURLOPT_URL, $url);
+        //设定请求后返回结果
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        //声明使用POST方式来进行发送
+        curl_setopt($ch, CURLOPT_POST, 1);
+        //发送什么数据呢
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        //忽略证书
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        //忽略header头信息
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        $headers=array('accept: application/json;charset=UTF-8','apikey: 5b4added-e80c-41fb-b5a9-16269d2de79b','content-type: application/json');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        //设置超时时间
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        //发送请求
+        $output = curl_exec($ch);
+        //关闭curl
+        curl_close($ch);
+        //返回数据
+        return $output;
     }
 }

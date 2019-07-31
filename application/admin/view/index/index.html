@@ -13,7 +13,7 @@
     <script type="text/javascript" src="__BS_JS__/cookie.js"></script>
     <script>
         // 是否开启刷新记忆tab功能
-        // var is_remember = false;
+        var is_remember = false;
     </script>
 </head>
 <body>
@@ -43,7 +43,7 @@
       <div id="side-nav">
         <ul id="nav">
             <li>
-                <a _href='member'>
+                <a _href='/admin/index/member'>
                     <i class="iconfont">&#xe6b8;</i>
                     <cite>用户管理</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
@@ -59,11 +59,26 @@
             </li>
 
             <li>
-                <a _href='coin'>
+                <a href="javascript:;">
                     <i class="iconfont">&#xe6b8;</i>
                     <cite>币种管理</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
+                <ul class="sub-menu">
+                    <li date-refresh="1">
+                        <a _href="cash">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>法币管理</cite>
+
+                        </a>
+                    </li >
+                    <li>
+                        <a _href="currency">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>虚拟货币管理</cite>
+                        </a>
+                    </li>
+                </ul>
             </li>
             <li>
                 <a href="javascript:;">
@@ -73,9 +88,9 @@
                 </a>
                 <ul class="sub-menu">
                     <li date-refresh="1">
-                        <a _href="user_jl">
+                        <a _href="tx">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>用户流水</cite>
+                            <cite>提现申请</cite>
 
                         </a>
                     </li >

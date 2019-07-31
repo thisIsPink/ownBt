@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>支付</title>
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_837732_7jk7kbco94r.css">
+  <style>
+    html,body,p,ul,li{
+      padding: 0px;
+      margin: 0px;
+    }
+    ul,li{
+      list-style: none;
+    }
+    a{
+      text-decoration: none;
+    }
+    .w1200{
+      width: 1200px;
+      margin: 0 auto;
+    }
+    /* 头部 */
+    header{
+      height: 64px;
+      width: 100%;
+      padding: 10px 0;
+    }
+    header h1{
+      text-align: center;
+      line-height: 64px;
+      font-size: 30px;
+      color: #008dd5;
+      margin: 0px;
+    }
+    .banner{
+      width: 100%;
+    }
+    .banner img{
+      width: 100%;
+    }
+    .container{
+      display: flex;
+      margin-top: 50px;
+      padding-bottom: 80px;
+    }
+    .mainL{
+      width: 300px;
+      height: 370px;
+      box-sizing: border-box;
+      padding: 35px 0 0 64px;
+      border-radius: 5px;
+      border: solid 1px #b5b5b5;
+      margin-right: 15px;
+    }
+    .mainL h3{
+      font-size: 26px;
+    }
+    .mainL .ltitle{
+      color: #b0b0b0;
+      font-size: 16px;
+    }
+    .mainL .price{
+      font-size: 26px;
+      font-weight: 500;
+      margin-bottom: 24px;
+      margin-top: 6px;
+    }
+    .mainL .noprice{
+      color: #008dd5;
+      margin-top: 6px;
+    }
+    .mainL .btnl{
+      background: #008dd5;
+      color: #ffffff;
+      width: 120px;
+      height: 35px;
+      margin-top: 20px;
+      line-height: 35px;
+      border-radius: 5px;
+      border: none;
+    }
+    .mainR{
+      flex: 1;
+      border-radius: 5px;
+      border: solid 1px #b5b5b5;
+      height: auto;
+      text-align: center;
+    }
+    .table{
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      color: #3c3c3c;
+      table-layout: fixed;
+    }
+    .table th{
+      background: #f5f5f5;
+      padding: 5px 0;
+      font-size: 14px;
+      line-height: 18px;
+      height: 34px;
+      font-weight: normal;
+    }
+    .table td{
+      height: 36px;
+      border-bottom: 1px solid #ececec;
+    }
+    .pagebox{
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 10px 20px;
+      color: #aeaeae;
+    }
+    .pagebox ul{
+      display: flex;
+      align-items: center;
+      margin-right: 10px;
+      color: #aeaeae;
+    }
+    .pagebox ul li{
+      margin: 0 4px;
+    }
+    .pagebox ul li.active{
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #008dd5;
+      line-height: 24px;
+    }
+    .pagebox ul li.active a{
+      color: #ffffff;
+    }
+    .pagebox ul a{
+      color: #aeaeae;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>OWNBT支付平台</h1>
+  </header>
+  <main>
+    <div class="banner">
+      <img src="./banner.jpg" alt="banner">
+    </div>
+    <div class="container w1200">
+      <div class="mainL">
+        <h3>资金总额</h3>
+        <p class="ltitle">可用余额（元）</p>
+        <p class="price">1000.00</p>
+        <p class="ltitle">不可用余额（元）</p>
+        <p class="noprice">0.00</p>
+        <button class="btnl">提现</button>
+      </div>
+      <div class="mainR">
+        <h3>交易记录</h3>
+        <table class="table">
+          <tr>
+            <th>时间</th>
+            <th>交易号</th>
+            <th>交易金额</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+          <tr>
+            <td>2019-07-18...</td>
+            <td>00000...</td>
+            <td>1000.00</td>
+            <td>成功</td>
+            <td>退款</td>
+          </tr>
+          <tr>
+            <td>2019-07-18...</td>
+            <td>00000...</td>
+            <td>1000.00</td>
+            <td>成功</td>
+            <td>退款</td>
+          </tr>
+          <tr>
+            <td>2019-07-18...</td>
+            <td>00000...</td>
+            <td>1000.00</td>
+            <td>成功</td>
+            <td>退款</td>
+          </tr>
+          <tr>
+            <td>2019-07-18...</td>
+            <td>00000...</td>
+            <td>1000.00</td>
+            <td>成功</td>
+            <td>退款</td>
+          </tr>
+          <tr>
+            <td>2019-07-18...</td>
+            <td>00000...</td>
+            <td>1000.00</td>
+            <td>成功</td>
+            <td>退款</td>
+          </tr>
+          <tr>
+            <td>2019-07-18...</td>
+            <td>00000...</td>
+            <td>1000.00</td>
+            <td>成功</td>
+            <td>退款</td>
+          </tr>
+          <tr>
+            <td>2019-07-18...</td>
+            <td>00000...</td>
+            <td>1000.00</td>
+            <td>成功</td>
+            <td>退款</td>
+          </tr>
+        </table>
+        <div class="pagebox">
+          <ul>
+            <li><a href="#"><</a></li>
+            <li class="active"><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li>...</li>
+            <li><a href="#">10</a></li>
+            <li><a href="#">></a></li>
+          </ul>
+          <p>共10页</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\admin\validate;
+namespace app\index\validate;
 
 use think\Validate;
 
@@ -36,7 +36,7 @@ class User extends Validate
         'eth'=>'ETH',
     ];
     protected $scene= [
-        'add'=>['user','password','money','reg_time','state','key','business','cash','eos'],
+        'login'=>['user','password'],
         'edit'=>['phone','email','cash','business','btc','eth','uid'],
         'valstate'=>['uid','state'],
         'moneyAdd'=>['uid','money'],

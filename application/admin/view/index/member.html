@@ -12,42 +12,13 @@
 
 <body>
 <tool>
-    <table class="layui-table" style="margin: 0;display: none" id="tool_table">
-        <colgroup>
-            <col width="80">
-            <col width="120">
-        </colgroup>
-        <thead>
-        <tr>
-            <th>币名</th>
-            <th>数量</th>
-            <th>冻结金额</th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    <table class="layui-table" style="margin-top: 0;display: none"id="message">
-        <colgroup>
-            <col width="140">
-            <col width="280">
-        </colgroup>
-        <thead>
-        <tr>
-            <th>时间</th>
-            <th>内容</th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
     <form class="layui-form" style="display: none;" id="alert_add">
         <div class="layui-form-item">
-            <label for="username" class="layui-form-label">
+            <label class="layui-form-label">
                 <span class="x-red">*</span>用户名
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="user" name="user" required="" lay-verify="required"
+                <input type="text" name="user" required="" lay-verify="required"
                        autocomplete="off" class="layui-input" oninput='this.value=this.value.toString().match(/^[A-Za-z]+$/)'>
             </div>
             <div class="layui-form-mid layui-word-aux">
@@ -55,21 +26,98 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label for="username" class="layui-form-label">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>选择货币
+            </label>
+            <div class="layui-input-inline" >
+                <select name="cash" lay-verify="required" lay-search class="add_cash">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
                 <span class="x-red">*</span>商家
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="business" name="business" autocomplete="off" class="layui-input">
+                <input type="text" name="business" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>备注该用户所属商家
             </div>
         </div>
         <div>
             <div class="layui-form-item">
-                <label for="L_repass" class="layui-form-label">
+                <label class="layui-form-label">
                 </label>
                 <button class="layui-btn" lay-filter="add" lay-submit="add">增加</button>
             </div>
         </div>
     </form>
+    <div class="layui-tab" style="display: none;" id="send_money">
+        <ul class="layui-tab-title">
+            <li class="layui-this">虚拟货币到账</li>
+            <li>法币到账</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form class="layui-form">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">
+                            <span class="x-red">*</span>到账金额
+                        </label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="money" required="" lay-verify="required"
+                                   autocomplete="off" class="layui-input" id="money" oninput='this.value=this.value.toString().match(/^\d+(?:\.\d{0,16})?/)'>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">
+                            <span class="x-red">*</span>选择货币
+                        </label>
+                        <div class="layui-input-inline" >
+                            <select name="currency" lay-verify="required" lay-search id="add_curr">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">
+                            <span class="x-red">*</span>实际到账金额
+                        </label>
+                        <div class="layui-input-inline">
+                            <input type="text" autocomplete="off" class="layui-input" id="show_money" disabled>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">
+                            </label>
+                            <button class="layui-btn" lay-filter="money_currency_add" lay-submit="">增加</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="layui-tab-item">
+                <form class="layui-form">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">
+                            <span class="x-red">*</span>到账金额
+                        </label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="money" required="" lay-verify="required"
+                                   autocomplete="off" class="layui-input" oninput='this.value=this.value.toString().match(/^\d+(?:\.\d{0,2})?/)'>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">
+                            </label>
+                            <button class="layui-btn" lay-filter="money_cash_add" lay-submit="add">增加</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </tool>
 <div class="x-nav">
       <span class="layui-breadcrumb">
@@ -108,6 +156,9 @@
         <a onclick="member_stop(this,{{d.id}})" href="javascript:;"  title="{{d.state == '1' ? '正常' : d.state == '0' ? '冻结' : '问题账号'}}"><i class="layui-icon">
             &#{{d.state == '1' ? 'xe601' : 'xe62f' }};
         </i></a>
+        <a onclick="x_admin_show('用户管理','member_edit?id='+{{d.id}})" href="javascript:;"><i class="layui-icon">&#xe716;</i></a>
+        <a onclick="send_money({{d.cash}},{{d.id}})" href="javascript:;"><i class="layui-icon">&#xe659;</i></a>
+        <a onclick="x_admin_show('余额记录查看','recode?id='+{{d.id}})" href="javascript:;"><i class="layui-icon">&#xe60b;</i></a>
     </script>
     <script type="text/html" id="member_state">
         <span class="layui-btn layui-btn-normal layui-btn-mini {{d.state == '1' ? '' : 'layui-btn-disabled'}}">{{d.state == '1' ? '正常' : d.state == '0' ? '冻结' : '问题账号'}}</span>
@@ -116,7 +167,6 @@
 <script>
     layui.use(['table','form'],function(){
         var table = layui.table;
-        var laydate = layui.laydate;
         var form = layui.form;
         var tableIns=table.render({
             elem: '#member_list'
@@ -126,28 +176,16 @@
             ,cols: [[ //表头
                 {field: 'id', title: 'ID', sort: true, }
                 ,{field: 'user', title: '用户名'}
-                ,{field: 'money', title: '账户余额'}
-                ,{field: 'business', title: '商家',edit:'text'}
+                ,{title: '账户余额',templet:'<div><span class="money">{{d.money}}</span>{{d.symbol}}</div>'}
+                ,{field: 'business', title: '商家'}
+                ,{field: 'btc', title: 'BTC账号'}
+                ,{field: 'eth', title: 'ETH账号'}
+                ,{field: 'remarks', title: '备注'}
+                ,{field: 'key', title: 'key'}
                 ,{field: 'reg_time', title: '注册时间',  sort: true,templet: '<div>{{getLocalTime(d.reg_time)}}</div>'}
-                ,{field: 'remarks', title: '备注',edit:'text'}
                 ,{field: 'state', title: '状态',toolbar:'#member_state'}
                 ,{ title:'操作', toolbar: '#member_bar'}
             ]]
-        });
-        table.on('edit(member_list)', function(obj){
-            $.ajax({
-                url: 'sub/user_info_edit',
-                type: 'post',
-                dataType: 'json',
-                data: {"field": obj.field,"value":obj.value,"id":obj.data.id},
-                success:function(msg){
-                    if(msg.flag==true){
-                        layer.msg("修改成功");
-                    }else{
-                        layer.msg("修改失败");
-                    }
-                }
-            });
         });
         form.on('submit(sreach)', function(data){
             tableIns.reload({
@@ -160,24 +198,95 @@
         });
         form.on('submit(add)',function(data){
             $.ajax({
-                url:'/admin/sub/user_add',
+                url:'/admin/sub/userAdd',
                 type:'POST',
+                dataType:"json",
                 data:{
                     user:data.field.user,
+                    cash:data.field.cash,
                     business:data.field.business
                 },
                 success:function (msg) {
-                  if(msg=='true'){
+                  if(msg.code=='1001'){
                       layer.msg('添加成功',{icon: 1,time: 1500},function () {
                           location.reload();
                       });
                   }else{
-                      layer.msg('添加失败');
+                      layer.msg(msg.msg);
                   }
+                }
+            });
+            return false;
+        });
+        form.on('submit(money_currency_add)',function(data){
+            if(data.field.money==0){
+                layer.msg('请输入金额');
+                return false;
+            }
+            $.ajax({
+                url:'/admin/sub/moneySendCurrency',
+                type:'POST',
+                dataType:"json",
+                data:{
+                    money:data.field.money,
+                    currency:data.field.currency,
+                    id:$('#send_money').val()
+                },
+                success:function (msg) {
+                    if(msg.code=='1001'){
+                        layer.close(layer.index);
+                        $('td[data-field="id"]>div:contains("'+$('#send_money').val()+'")').eq(0).closest('tr').find('.money').html(msg.data);
+                        layer.msg('添加成功',{icon: 1,time: 1500});
+                    }else{
+                        layer.msg(msg.msg);
+                    }
                 }
 
             });
             return false;
+        });
+        form.on('submit(money_cash_add)',function(data){
+            if(data.field.money==0){
+                layer.msg('请输入金额');
+                return false;
+            }
+            $.ajax({
+                url:'/admin/sub/moneySendCurrency',
+                type:'POST',
+                dataType:"json",
+                data:{
+                    money:data.field.money,
+                    id:$('#send_money').val()
+                },
+                success:function (msg) {
+                    if(msg.code=='1001'){
+                        layer.close(layer.index);
+                        $('td[data-field="id"]>div:contains("'+$('#send_money').val()+'")').eq(0).closest('tr').find('.money').html(msg.data);
+                        layer.msg('添加成功',{icon: 1,time: 1500});
+                    }else{
+                        layer.msg(msg.msg);
+                    }
+                }
+
+            });
+            return false;
+        });
+        $.ajax({
+            url:'/admin/json/cashList',
+            dataType:'json',
+            type:'get',
+            data: {
+                page: 1,
+                limit: 100000
+            },
+            success:function (msg) {
+                var str='';
+                for(var i = 0; i <msg.data.length; i++){
+                    str+='<option value="'+msg.data[i]['id']+'">'+msg.data[i]['name']+msg.data[i]['symbol']+'</option>';
+                }
+                $(".add_cash").html(str);
+                form.render('select');
+            }
         });
     })
     /*用户-停用*/
@@ -186,7 +295,7 @@
             layer.confirm('确认要停用吗？',function(index){
                 //发异步把用户状态进行更改
                 $.ajax({
-                    url: '/admin/sub/user_state_down',
+                    url: '/admin/sub/userStateDown',
                     type: 'post',
                     dataType: 'json',
                     data: {"id": id},
@@ -203,7 +312,7 @@
         }else if($(obj).attr('title')=='冻结'){
             layer.confirm('确认要启用吗？',function(index){
                 $.ajax({
-                    url: '/admin/sub/user_state_up',
+                    url: '/admin/sub/userStateUp',
                     type: 'post',
                     dataType: 'json',
                     data: {"id": id},
@@ -235,10 +344,43 @@
                 type: 1,
                 title:'添加',
                 content: $('#alert_add'),
-                area:['400px','250px']
+                area:['450px','300px']
             })
         });
     }
+    function send_money(id,uid) {
+        $.ajax({
+            url:'/admin/json/proportionCashList',
+            type:'post',
+            dataType:'json',
+            data:{'cash':id},
+            success:function(obj){
+                $('#send_money').val(uid);
+                $('#send_money [name="money"]').val('0');
+                $('#show_money').val(0);
+                var str='';
+                for(var i = 0; i <obj.data.length; i++){
+                    str+='<option value="'+obj.data[i]['currency']+'" propor="'+obj.data[i]['proportion']+'">'+obj.data[i]['name']+'</option>';
+                }
+                $('#add_curr').html(str);
+                layui.use(['layer','form'], function(){
+                    var layer = layui.layer;
+                    var form = layui.form;
+                    form.render('select');
+                    layer.open({
+                        type: 1,
+                        title:'添加',
+                        content: $('#send_money'),
+                        area:['450px','350px']
+                    })
+                });
+                $('#money').blur(function () {
+                    $('#show_money').val($(this).val()*$('#add_curr [value='+$('#add_curr').val()+']').attr('propor'));
+                })
+            }
+        });
+    }
+
 </script>
 </body>
 

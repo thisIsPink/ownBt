@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="__BS_CSS__/font.css">
+    <link rel="stylesheet" href="__BS_CSS__/xadmin.css">
+    <script type="text/javascript" src="__P_JS__/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="__BS_LAY__/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__BS_JS__/xadmin.js"></script>
+    <script type="text/javascript" src="__BS_JS__/cookie.js"></script>
+</head>
+
+<body>
+<div class="x-body">
+    <form class="layui-form" id="alert_edit">
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>手机
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" value="<{$data.phone}>" name="phone" required="" lay-verify="required|phone" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>邮箱
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" value="<{$data.email}>" name="email" required="" lay-verify="required|email" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>使用法币
+            </label>
+            <div class="layui-input-inline" >
+                <select name="cash" lay-verify="required" lay-search>
+                    <{volist name="cash" id='vo'}>
+                    <option value="<{$vo.id}>" <{$vo.id==$data.cash?'selected':''}>><{$vo.name}><{$vo.symbol}></option>
+                    <{/volist}>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>商家
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" value="<{$data.business}>" name="business" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>备注该用户所属商家
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>备注
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" value="<{$data.remarks}>" name="remarks" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>备注该用户所属商家
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>BTC
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" value="<{$data.btc}>" name="btc" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>BTC账号
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>ETH
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" value="<{$data.eth}>" name="eth" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>ETH账号
+            </div>
+        </div>
+        <div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                </label>
+                <button class="layui-btn" lay-filter="edit" lay-submit="add">修改</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['form','layer'], function(){
+        var form = layui.form
+        //监听提交
+        form.on('submit(edit)', function(data){
+            obj=data.field;
+            obj.id=GetQueryString('id');
+            $.ajax({
+                url: '/admin/sub/userEdit',
+                type: 'post',
+                dataType: 'json',
+                data: obj,
+                success:function(msg){
+                    if(msg.code=="1001"){
+                        layer.alert("修改成功", {icon: 6},function () {
+                            // 获得frame索引
+                            var index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            parent.layer.close(index);
+                            x_admin_father_reload();
+                        });
+                    }else{
+                        layer.msg(msg.msg);
+                    }
+                }
+            });
+            return false;
+        });
+    });
+    function GetQueryString(name){
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return unescape(r[2]); return null;
+    }
+</script>
+</body>
+
+</html>

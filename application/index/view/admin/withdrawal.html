@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>支付</title>
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_837732_7jk7kbco94r.css">
+  <style>
+    html,body,p,ul,li{
+      padding: 0px;
+      margin: 0px;
+    }
+    ul,li{
+      list-style: none;
+    }
+    a{
+      text-decoration: none;
+    }
+    .w1200{
+      width: 1200px;
+      margin: 0 auto;
+    }
+    /* 头部 */
+    header{
+      height: 64px;
+      width: 100%;
+      padding: 10px 0;
+    }
+    header h1{
+      text-align: center;
+      line-height: 64px;
+      font-size: 30px;
+      color: #008dd5;
+      margin: 0px;
+    }
+    .container h2{
+      color: #333333;
+      font-size: 20px;
+      margin-bottom: 10px;
+      padding-left: 30px;
+    }
+    .container hr{
+      color: #fafafa;
+    }
+    .orange{
+      color: #ff721f
+    }
+    .change{
+      color: #3368bf;
+      padding: 6px 15px;
+      border: 1px solid #3368bf;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .table{
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      color: #3c3c3c;
+      table-layout: fixed;
+    }
+    .table tr:nth-of-type(even){
+      background: #fafafa;
+    }
+    .table td:first-of-type{
+      text-align:right;
+    }
+    .table td{
+      height:40px;
+    }
+    .table input{
+      width: 200px;
+      height: 24px;
+      border-radius: 5px;
+      border: solid 1px #cccccc;
+      outline: none;
+      font-size: 14px;
+      padding-left: 4px;
+      padding-right: 4px;
+    }
+    .btn{
+      width: 320px;
+      height: 46px;
+      background-color: #008dd5;
+      border-radius: 5px;
+      margin: 0 auto;
+      border: none;
+      font-size: 18px;
+      margin-top: 20px;
+      display: block;
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>OWNBT支付平台</h1>
+  </header>
+  <main class="w1200 container">
+    <h2>提现</h2>
+    <hr />
+    <table class="table">
+      <tr>
+        <td>提现方式：</td>
+        <td>
+          <span class="change">普通提现</span>
+        </td>
+      </tr>
+      <tr>
+        <td>持卡人：</td>
+        <!-- <td>流沙包（6000**** **** 0000）</td> -->
+        <td><span class="change">添加银行卡</span></td>
+      </tr>
+      <tr>
+        <td>可提金额：</td>
+        <td><span class="orange">188.00</span> 元</td>
+      </tr>
+      <tr>
+        <td>提现金额：</td>
+        <td>
+          <input type="text" placeholder="请输入不要大于可提金额的数字金额"> 元
+        </td>
+      </tr>
+      <tr>
+        <td>手续费：</td>
+        <td><span class="orange">0.00</span> 元</td>
+      </tr>
+      <tr>
+        <td>实际到账金额：</td>
+        <td><span class="orange">0.00</span> 元</td>
+      </tr>
+    </table>
+    <button class="btn">立即提现</button>
+  </main>
+  <article class="">
+
+  </article>
+</body>
+</html>

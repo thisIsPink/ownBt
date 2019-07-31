@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>支付</title>
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_837732_7jk7kbco94r.css">
+  <script type="text/javascript" src="__P_JS__/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="__BS_LAY__/layui.js" charset="utf-8"></script>
+  <script type="text/javascript" src="__BS_JS__/xadmin.js"></script>
+  <script type="text/javascript" src="__BS_JS__/cookie.js"></script>
+  <style>
+    html,body,p,ul,li{
+      padding: 0px;
+      margin: 0px;
+    }
+    ul,li{
+      list-style: none;
+    }
+    a{
+      text-decoration: none;
+    }
+    .w1200{
+      width: 1200px;
+      margin: 0 auto;
+    }
+    /* 头部 */
+    header{
+      height: 64px;
+      width: 100%;
+      padding: 10px 0;
+    }
+    header h1{
+      text-align: center;
+      line-height: 64px;
+      font-size: 30px;
+      color: #008dd5;
+      margin: 0px;
+    }
+    .container h2{
+      color: #333333;
+      font-size: 20px;
+      margin-bottom: 10px;
+      padding-left: 30px;
+    }
+    .container hr{
+      color: #fafafa;
+    }
+    .orange{
+      color: #ff721f
+    }
+    .change{
+      color: #3368bf;
+      padding: 6px 15px;
+      border: 1px solid #3368bf;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .table{
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      color: #3c3c3c;
+      table-layout: fixed;
+    }
+    .table td:first-of-type{
+      text-align:right;
+    }
+    .table td{
+      height:40px;
+    }
+    .table input{
+      width: 200px;
+      height: 24px;
+      border-radius: 5px;
+      border: solid 1px #cccccc;
+      outline: none;
+      font-size: 14px;
+      padding-left: 4px;
+      padding-right: 4px;
+    }
+    .btn{
+      width: 320px;
+      height: 46px;
+      background-color: #008dd5;
+      border-radius: 5px;
+      margin: 0 auto;
+      border: none;
+      font-size: 18px;
+      margin-top: 20px;
+      display: block;
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>OWNBT支付平台</h1>
+  </header>
+  <main class="w1200 container">
+    <h2>添加银行卡</h2>
+    <hr />
+    <table class="table">
+      <tr>
+        <td>开户银行：</td>
+        <td>
+          <input type="text" placeholder="xxxx银行" id="bank">
+        </td>
+      </tr>
+      <tr>
+        <td>姓名：</td>
+        <td>
+          <input type="text" placeholder="*AA" id="name">
+        </td>
+      </tr>
+      <tr>
+        <td>储蓄卡卡号：</td>
+        <td>
+          <input type="text" placeholder="*AA" id="card" oninput = "value=value.replace(/[^\d]/g,'')">
+        </td>
+      </tr>
+      <tr>
+        <td>身份证号码：</td>
+        <td>
+          <input type="text" placeholder="*AA" id="num">
+        </td>
+      </tr>
+      <tr>
+        <td>手机号码：</td>
+        <td>
+          <input type="text" placeholder="*AA" id="phone" oninput = "value=value.replace(/[^\d]/g,'')">
+        </td>
+      </tr>
+    </table>
+    <button class="btn" id="sub">同意并开通</button>
+  </main>
+<script>
+  $('#sub').click(function () {
+    var bank=$('#bank').val(),name=$('#name').val(),card=$('#card').val(),num=$('#num').val(),phone=$('#phone').val();
+    if(bank!=null&&bank!==''&&name!=null&&name!==''&&card!=null&&card!==''&&num!=null&&num!==''&&phone!=null&&phone!==''){
+      $.ajax({
+        url:'/index/api/addCard',
+        data:{bank:bank,name:name,card:card,num:num,phone:phone},
+        dataType:'json',
+        type:'post',
+        success:function (obj) {
+          if(obj.code=='1001'){
+            layer.msg('添加成功',function () {
+              window.location.href="/index/index/withdrawal";
+            })
+          }else{
+            layer.msg(obj.msg);
+          }
+        }
+      });
+    }
+  })
+</script>
+</body>
+</html>
